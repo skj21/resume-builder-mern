@@ -1,0 +1,34 @@
+// backend/routes/resumeRoutes.js
+import express from 'express';
+import { protect } from '../middleware/authMiddleware.js';
+import {
+  createResume,
+  getUserResumeId,
+  getUserResume,
+  updateResume,
+  deleteResume
+} from '../controllers/resumeController.js';
+import { uploadResumeImage } from '../controllers/uploadImages.js';
+import upload from '../middleware/uploadMiddleware.js';
+
+const resumeRouter = express.Router();
+
+resumeRouter.post('/', protect, createResume);
+resumeRouter.get('/', protect, getUserResume);
+resumeRouter.get('/:id', protect, getUserResumeId);
+
+resumeRouter.put('/:id', protect, updateResume);
+
+resumeRouter.put(
+  '/:id/upload-image',
+  protect,
+  upload.fields([
+    { name: 'thumbnail', maxCount: 1 },
+    { name: 'profileImage', maxCount: 1 }
+  ]),
+  uploadResumeImage
+);
+
+resumeRouter.delete('/:id', protect, deleteResume);
+
+export default resumeRouter;
