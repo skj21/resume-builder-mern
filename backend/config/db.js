@@ -1,6 +1,15 @@
 import mongoose from "mongoose";
 
-export const connectDB = async ()=> {
-  await mongoose.connect('mongodb+srv://shashankjha2621_db_user:ResumeBuild21@cluster0.gytpa8v.mongodb.net/RESUME')
-  .then(() => console.log('DB CONNECTED'))
-}
+export const connectDB = async () => {
+  try {
+    await mongoose.connect(process.env.MONGO_URI, {
+      useNewUrlParser: true,
+      useUnifiedTopology: true,
+    });
+
+    console.log("✅ MongoDB Connected Successfully");
+  } catch (error) {
+    console.error("❌ MongoDB Connection Error:", error.message);
+    process.exit(1);
+  }
+};
